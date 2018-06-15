@@ -648,9 +648,7 @@ def updateSheets():
             count = count + 1
 
     log.close()
-    print(count)
-    print(len(vals))
-    prevLine = vals[count]
+    prevLine = vals[count-1]
 
     # Call the Sheets API
     body = {
