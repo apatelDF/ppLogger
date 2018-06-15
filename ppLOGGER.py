@@ -633,7 +633,7 @@ def updateSheets():
         addToVals = False
         if(len(prevLine) == 0):
             addToVals = True
-        elif(diffVals(items[1:], prev[2:])):
+        elif(diffVals(items[1:], prevLine[2:])):
             addToVals = True
 
         if (addToVals):
