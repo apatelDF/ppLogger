@@ -123,14 +123,14 @@ options['title'] = 'Open setup file'
 
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 SPREADSHEET_ID = '1jKAr2EvVzthwGE_jFjFh5Jk2iYvxG3FdW0KR7aJCLh8'
+prevLine = []
+
 store = file.Storage('credentials.json')
 creds = store.get()
 if not creds or creds.invalid:
     flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
     creds = tools.run_flow(flow, store)
 service = build('sheets', 'v4', http=creds.authorize(Http()))
-
-prevLine = []
 
 
 def on_closing():
