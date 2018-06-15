@@ -648,6 +648,8 @@ def updateSheets():
             count = count + 1
 
     log.close()
+    print(count)
+    print(len(vals))
     prevLine = vals[count]
 
     # Call the Sheets API
