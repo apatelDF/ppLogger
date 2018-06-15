@@ -130,6 +130,8 @@ if not creds or creds.invalid:
     creds = tools.run_flow(flow, store)
 service = build('sheets', 'v4', http=creds.authorize(Http()))
 
+prevLine = []
+
 
 def on_closing():
     shutdown()
@@ -625,21 +627,23 @@ def updateSheets():
     date = str(datetime.datetime.today()).split()[0]
     for row in reader:
         items = row[0].split(',')
-        if(count == 0):
+        addToVals = False
+
+        if(len(prevLine) == 0):
+            addToVals = True
+        elif(count == 0 and diffVals(items[1:], prevLine[2:])):
+            addToVals = True
+        elif(diffVals(items[1:], vals[count-1][2:])):
+            addToVals = True
+
+        if (addToVals):
             vals.append([])
             vals[count].append(date)
             for s in items:
                 vals[count].append(s)
             count = count + 1
-
-        elif(diffVals(items, vals[count-1][1:])):
-            vals.append([])
-            vals[count].append(date)
-            for s in items:
-                vals[count].append(s)
-            count = count + 1
-
     log.close()
+    prevLine = vals[count]
 
     # Call the Sheets API
     body = {
@@ -652,7 +656,7 @@ def updateSheets():
         body=body).execute()
 
 def diffVals(arr1,arr2):
-    for i in range (1,len(arr1),1):
+    for i in range (0,len(arr1),1):
         if(not arr1[i] == arr2[i]):
             return True
     return False
