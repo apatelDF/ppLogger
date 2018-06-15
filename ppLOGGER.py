@@ -615,10 +615,13 @@ def task():
         root.wm_title("DAQCplate Data Logger - LOGGING - "+str(SampleC)+" Samples and "+str(SampleT*SampleC)+" Seconds Remaining")
         if (SampleC==0):
             StopLog()
-            updateSheets()
-            StartLog()
+            try:
+                updateSheets()
+                StartLog()
+                #showinfo("Logging","Logging Complete")
+            except:
+                shutDown()
 
-            #showinfo("Logging","Logging Complete")
 
 def updateSheets():
     vals =[]
@@ -637,7 +640,7 @@ def updateSheets():
             addToVals = True
         elif(diffVals(items[1:], prevLine[2:])):
             addToVals = True
-            
+
         # Add array of data at next open index of vals
         if (addToVals):
             vals.append([])
