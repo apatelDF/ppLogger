@@ -634,7 +634,6 @@ def updateSheets():
         items = row[0].split(',')
         addToVals = False
         if(len(prev) == 0):
-            print("PREV == 0")
             addToVals = True
         elif(diffVals(items[1:], prev[2:])):
             print(items[1:])
@@ -646,12 +645,10 @@ def updateSheets():
             vals[count].append(date)
             for s in items:
                 vals[count].append(s)
+            prevLine = vals[count]
             count = count + 1
 
     log.close()
-    print(len(vals))
-    print(count -1)
-    prevLine = vals[count-1]
 
     # Call the Sheets API
     body = {
