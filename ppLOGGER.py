@@ -130,7 +130,6 @@ if not creds or creds.invalid:
     creds = tools.run_flow(flow, store)
 service = build('sheets', 'v4', http=creds.authorize(Http()))
 
-prevLine = []
 
 
 def on_closing():
@@ -625,14 +624,12 @@ def updateSheets():
     reader = csv.reader(log, delimiter=';')
     count = 0
     date = str(datetime.datetime.today()).split()[0]
-    global prevLine
+
     for row in reader:
         items = row[0].split(',')
         addToVals = False
 
-        if(len(prevLine) == 0):
-            addToVals = True
-        elif(count == 0 and diffVals(items[1:], prevLine[2:])):
+        if(count == 0):
             addToVals = True
         elif(diffVals(items[1:], vals[count-1][2:])):
             addToVals = True
@@ -644,7 +641,6 @@ def updateSheets():
                 vals[count].append(s)
             count = count + 1
     log.close()
-    prevLine = vals[count - 1]
 
     # Call the Sheets API
     body = {
