@@ -21,7 +21,7 @@ import copy
 
 try:
     import piplates.DAQCplate as DAQC
-    #import DAQCplate as DAQC    
+    #import DAQCplate as DAQC
 except ImportError:
     print "To run this program you need to install the Pi-Plates library."
     print "Do so by executing the following from the command line:"
@@ -33,45 +33,45 @@ except ImportError:
         print('Pi-Plates module installed. Please restart the program')
         sys.exit()
     else:
-        sys.exit() 
-  
+        sys.exit()
+
 def VersionErr():
     print "For best performance, please install the latest Pi-Plates library."
     print "Do so by executing the following from the command line:"
-    print "sudo pip install --upgrade pi-plates"    
+    print "sudo pip install --upgrade pi-plates"
     response=raw_input("Would you like to upgrade now? (y/n)")
     if (response.lower()=='y'):
         os.system("sudo pip install --upgrade pi-plates")
         reload(DAQC)
     else:
-        sys.exit() 
+        sys.exit()
 
 
 try:
-    version=DAQC.getVersion()     
+    version=DAQC.getVersion()
     if (version<1.02):
-        VersionErr()    
+        VersionErr()
 except AttributeError:
-    VersionErr()     
-      
+    VersionErr()
+
 
 try:    #check for presence of Intial State module
     imp.find_module('ISStreamer')
     ISSfound = True
-    from ISStreamer.Streamer import Streamer 
+    from ISStreamer.Streamer import Streamer
 except ImportError:
     ISSfound = False
     print
     print 'Visit https://www.initialstate.com'
     print 'and learn how to stream your data to the cloud.'
-    print 
+    print
     response=raw_input("Would you like to install the Initial State streamer now? (y/n)")
     if (response.lower()=='y'):
         os.system("sudo pip install ISStreamer")
         print('Intial State streamer installed. Please restart the program')
         sys.exit()
-    
-    
+
+
 try:    #ensure that the PMW module has been installed
     imp.find_module('Pmw')
     PMWfound = True
@@ -86,12 +86,12 @@ except ImportError:
         os.system("sudo apt-get install python-pmw")
         import Pmw
     else:
-        sys.exit()     
+        sys.exit()
 
 ################################################################################
 ############### Start Program! #################################################
 ################################################################################
-Version = 1.0    
+Version = 1.0
 
 
 # define options for opening or saving a log file
@@ -140,7 +140,7 @@ def NewLogFileCustom():
         fName='log.log'
         if ('.log' in fName):
             lfOpen=True
-            
+
 def NewLogFile():
     global logFile, lfOpen, fName
     if (Logging==False):
@@ -148,7 +148,7 @@ def NewLogFile():
         fName= asksaveasfilename(**newlogfile_opt)
         if ('.log' in fName):
             lfOpen=True
-            
+
 def NewSetupFile():
     suFilename=asksaveasfilename(**setupfile_opt)
     if ('.stp' in suFilename):
@@ -173,18 +173,18 @@ def NewSetupFile():
                     setup= setup+str(desc[k])+','
                 desc=daqc[i].dinGetStates()
                 for k in range(8):
-                    setup = setup+str(desc[k])+',' 
+                    setup = setup+str(desc[k])+','
         setup = setup + StreamBucket.get() + ',' + StreamIdentifier.get() + ',' + StreamKey.get()+ ','
         setup = setup + str(AoutSignal.get()) + ',' + str(DoutSignal.get())+ ','
         setup = setup + SampleCount.get() + ',' + SamplePeriod.get()
         sufile.write(setup)
-        sufile.write('\n')      
+        sufile.write('\n')
         sufile.close()
 
 
 def OpenSetupFileCustom():
     suFilename = 'setup.stp'#askopenfilename(**setupfile_opt)
-    if ('.stp' in suFilename):    
+    if ('.stp' in suFilename):
         sufile=open(suFilename,'r')
         setup=''
         setup=sufile.read()
@@ -198,7 +198,7 @@ def OpenSetupFileCustom():
             if (DAQCpresent[i]==1):
                 current[i]=str(i)
             else:
-                current[i]='X'    
+                current[i]='X'
         setup=setupList[0:8]
         if (setup != current):
             showwarning('Load Setup','Setup file does NOT match your hardware.')
@@ -208,13 +208,13 @@ def OpenSetupFileCustom():
             for i in range(8):
                 if (DAQCpresent[i]==1):
                     sBlock=setupList[k:k+8]
-                    daqc[i].a2dSetLabels(sBlock)        
+                    daqc[i].a2dSetLabels(sBlock)
                     sBlock=setupList[k+8:k+16]
                     daqc[i].dinSetLabels(sBlock)
                     sBlock=setupList[k+16:k+24]
-                    daqc[i].a2dSetStates(sBlock)        
+                    daqc[i].a2dSetStates(sBlock)
                     sBlock=setupList[k+24:k+32]
-                    daqc[i].dinSetStates(sBlock)                
+                    daqc[i].dinSetStates(sBlock)
                     k+=32
             StreamBucket.set(setupList[k])
             StreamIdentifier.set(setupList[k+1])
@@ -226,7 +226,7 @@ def OpenSetupFileCustom():
 
 def OpenSetupFile():
     suFilename = askopenfilename(**setupfile_opt)
-    if ('.stp' in suFilename):    
+    if ('.stp' in suFilename):
         sufile=open(suFilename,'r')
         setup=''
         setup=sufile.read()
@@ -240,7 +240,7 @@ def OpenSetupFile():
             if (DAQCpresent[i]==1):
                 current[i]=str(i)
             else:
-                current[i]='X'    
+                current[i]='X'
         setup=setupList[0:8]
         if (setup != current):
             showwarning('Load Setup','Setup file does NOT match your hardware.')
@@ -250,13 +250,13 @@ def OpenSetupFile():
             for i in range(8):
                 if (DAQCpresent[i]==1):
                     sBlock=setupList[k:k+8]
-                    daqc[i].a2dSetLabels(sBlock)        
+                    daqc[i].a2dSetLabels(sBlock)
                     sBlock=setupList[k+8:k+16]
                     daqc[i].dinSetLabels(sBlock)
                     sBlock=setupList[k+16:k+24]
-                    daqc[i].a2dSetStates(sBlock)        
+                    daqc[i].a2dSetStates(sBlock)
                     sBlock=setupList[k+24:k+32]
-                    daqc[i].dinSetStates(sBlock)                
+                    daqc[i].dinSetStates(sBlock)
                     k+=32
             StreamBucket.set(setupList[k])
             StreamIdentifier.set(setupList[k+1])
@@ -265,8 +265,8 @@ def OpenSetupFile():
             DoutSignal.set(int(setupList[k+4]))
             SampleCount.set(setupList[k+5])
             SamplePeriod.set(setupList[k+6])
- 
-    
+
+
 def StartLog():
     global logFile, lfOpen, Logging, streamOpen, fName, SampleC, logHeader, streamer
     if (((lfOpen) or (streamOpen)) and  (Logging==False)):
@@ -284,34 +284,34 @@ def StartLog():
                 desc=daqc[i].dinDescriptors()
                 for k in range(8):
                     if (desc[k] != ''):
-                        Header= Header+'DAQC'+str(i)+'.'+desc[k]+','                       
-        Header = Header[:-1] 
+                        Header= Header+'DAQC'+str(i)+'.'+desc[k]+','
+        Header = Header[:-1]
         logHeader=Header
         if (lfOpen):
             logFile=open(fName,'w')
-            logFile.write(Header)
-            logFile.write('\n')
+            # logFile.write(Header)
+            # logFile.write('\n')
         if (streamOpen):
             streamer = Streamer(bucket_name=StreamBucket.get(), bucket_key=StreamIdentifier.get(), access_key=StreamKey.get())
-            streamer.log("Pi-Plates", "DACQ Log Stream Starting")            
-        Logging=True   
+            streamer.log("Pi-Plates", "DACQ Log Stream Starting")
+        Logging=True
         SampleC=int(SampleCount.get())
     else:
         showerror(
             "Logging",
             "You must open a log file or a stream before you can start logging"
         )
-    
+
 def StopLog():
     global logFile, lfOpen, Logging, streamOpen, streamer
     if (Logging):
         Logging=False
         root.wm_title("DAQCplate Data Logger")
         if (lfOpen):
-            logFile.close()   
+            logFile.close()
         if (streamOpen):
             streamer.close()
-    
+
 def About():
     Pmw.aboutversion('1.0')
     Pmw.aboutcopyright('Copyright Wallyware, inc 2016\nAll rights reserved')
@@ -322,40 +322,40 @@ def About():
     about = Pmw.AboutDialog(root, applicationname = 'ppLogger')
     about.activate(globalMode = 0, geometry = 'centerscreenfirst')
     about.withdraw()
-    about.show() 
+    about.show()
 
-def Docs():   
+def Docs():
     cmd_line = "xpdf ppLOGGER-Documentation.pdf"
     p = subprocess.Popen(cmd_line, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = p.communicate()[0]
 
-def License():   
+def License():
     cmd_line = "xpdf GNUpublicLicense.pdf"
     p = subprocess.Popen(cmd_line, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    out = p.communicate()[0]    
-    
+    out = p.communicate()[0]
+
 def shutDown():
     global lfOpen, Logging, streamOpen, streamer
     StopLog()
     if (lfOpen):
-        logFile.close()   
+        logFile.close()
     if (streamOpen):
-        streamer.close()   
+        streamer.close()
     root.quit()
-    
-#Configure: Dialog box to get sampling parameters that holds focus until closed.    
+
+#Configure: Dialog box to get sampling parameters that holds focus until closed.
 def Configure():
     if (Logging==False):
-        cBox=Toplevel()    
+        cBox=Toplevel()
         cBox.transient(master=root)
-        cBox.wm_title("Log Setup")   
+        cBox.wm_title("Log Setup")
         cBox.focus_set()
 
         sP=Label(cBox,text='Sample Period in Seconds (Minimum is '+str(SampleTmin)+'):', padx=2, pady=2)
         sP.grid(row=0,column=0,sticky="e")
         sPval=Entry(cBox,width=8,textvariable=SamplePeriod)
         sPval.grid(row=0,column=1,sticky="w")
-        
+
         sC=Label(cBox,text="Sample Count:", padx=2, pady=2)
         sC.grid(row=1,column=0,sticky="e")
         sCval=Entry(cBox,width=8,textvariable=SampleCount)
@@ -365,7 +365,7 @@ def Configure():
         sD1.grid(row=2,column=0,sticky="e")
         sD2=Label(cBox,textvariable=sDval, pady=20)
         sD2.grid(row=2,column=1,sticky="w")
-    
+
         sB=Button(cBox, text='Close', command=cBox.destroy)
         sB.grid(row=3, columnspan=2, pady=4)
 
@@ -373,10 +373,10 @@ def Configure():
         root.wait_window(cBox)
 
 
-#streamSetup: Dialog box to get stream parameters that holds focus until closed.    
+#streamSetup: Dialog box to get stream parameters that holds focus until closed.
 def streamSetup():
     global streamOpen
-    
+
     def Enable():
         global streamOpen
         streamOpen=True
@@ -385,77 +385,77 @@ def streamSetup():
     def Disable():
         global streamOpen
         streamOpen=False
-        sBox.destroy()        
-        
+        sBox.destroy()
+
     if (Logging==False):
-        sBox=Toplevel()    
+        sBox=Toplevel()
         sBox.transient(master=root)
-        sBox.wm_title("Stream Setup")   
+        sBox.wm_title("Stream Setup")
         sBox.focus_set()
 
         sK=Label(sBox,text='Your assigned Stream Key:', padx=2, pady=2)
         sK.grid(row=0,column=0,sticky="e")
         sKval=Entry(sBox,width=32,textvariable=StreamKey)
         sKval.grid(row=0,column=1,sticky="w")
-        
+
         sB=Label(sBox,text="The Bucket Name for Your Data:", padx=2, pady=2)
         sB.grid(row=1,column=0,sticky="e")
         sBval=Entry(sBox,width=32,textvariable=StreamBucket)
         sBval.grid(row=1,column=1,sticky="w")
-        
+
         sI=Label(sBox,text="The Bucket Identifier for Your Data:", padx=2, pady=2)
         sI.grid(row=2,column=0,sticky="e")
         sIval=Entry(sBox,width=32,textvariable=StreamIdentifier)
-        sIval.grid(row=2,column=1,sticky="w")        
+        sIval.grid(row=2,column=1,sticky="w")
 
         sD1=Label(sBox,text="Log in To Your Account at https://www.initialstate.com to View Your Data", pady=20)
         sD1.grid(row=3,columnspan=2)
-        
+
         sBut=Button(sBox, text='Save Values and Enable Streaming', command=Enable)
         sBut.grid(row=4, column=0, padx=2, pady=2)
-        
+
         cBut=Button(sBox, text='Save Values Only', command=Disable)
         cBut.grid(row=4, column=1, padx=2, pady=2)
 
         sBox.grab_set()
-        root.wait_window(sBox)            
+        root.wait_window(sBox)
 
-#signalSetup: Dialog box to control test signals that holds focus until closed.    
+#signalSetup: Dialog box to control test signals that holds focus until closed.
 def signalSetup():
     global aoutSignalOn, doutSignalOn
-    
-    sigBox=Toplevel()    
+
+    sigBox=Toplevel()
     sigBox.transient(master=root)
-    sigBox.wm_title("Test Signal Setup")   
+    sigBox.wm_title("Test Signal Setup")
     sigBox.focus_set()
 
     aoutchk=Checkbutton(sigBox,variable=AoutSignal,onvalue = 1, offvalue = 0)
     aoutchk.grid(row=0,column=0,sticky="e")
     sA=Label(sigBox,text='Enable Analog Signals     ', padx=2, pady=2)
     sA.grid(row=0,column=1,sticky="w")
-    
+
     doutchk=Checkbutton(sigBox,variable=DoutSignal,onvalue = 1, offvalue = 0)
     doutchk.grid(row=1,column=0,sticky="e")
     sD=Label(sigBox,text='Enable Digital Signals     ', padx=2, pady=2)
     sD.grid(row=1,column=1,sticky="w")
-        
+
     cBut=Button(sigBox, text='Close', command=sigBox.destroy)
     cBut.grid(row=2, columnspan=2, padx=2, pady=2)
 
     sigBox.grab_set()
-    root.wait_window(sigBox)  
-   
+    root.wait_window(sigBox)
+
 #doUpdates: a recurring routine to update the value of the displayed test duration value
 def doUpdates():
-    root.after(500,doUpdates)   
+    root.after(500,doUpdates)
     try:
         sDval.set(str(float(SamplePeriod.get())*float(SampleCount.get())))
     except ValueError:
-        sDval.set('0')    
+        sDval.set('0')
 
-#ViewLog: Functions for providing different methods of exmining data        
+#ViewLog: Functions for providing different methods of exmining data
 def ViewLog():
-    global Logging, fName 
+    global Logging, fName
 
     def vPlot():
         pFile=getFile()
@@ -464,13 +464,13 @@ def ViewLog():
         else:
             os.system('python loggerPLOT.py ' + pFile)
             vBox.destroy()
-        
-    def vStream():  
+
+    def vStream():
         showinfo(
             'View Stream',
             'Log into your account at https://www.initialstate.com to see your streaming data log.')
         vBox.destroy()
-    
+
     def vFile():
         pFile=getFile()
         if (pFile==''):
@@ -478,15 +478,15 @@ def ViewLog():
         else:
             os.system('leafpad ' + pFile)
             vBox.destroy()
-            
-    def vSpreadsheet():  
+
+    def vSpreadsheet():
         pFile=getFile()
         if (pFile==''):
             return
         else:
             os.system('localc -o ' + pFile)
             vBox.destroy()
-            
+
     def getFile():
         global Logging, fName
         # define options for opening an existing log file
@@ -504,24 +504,24 @@ def ViewLog():
                 if (fName==xfName):
                     showerror('Log File','Viewing currently open log file is not allowed')
                 else:
-                    fLoop=False           
+                    fLoop=False
         return xfName
-                  
+
     # define options for opening or saving a setup file
     viewWarning_opt = options = {}
     options['icon'] = WARNING
-    options['type'] = OKCANCEL 
+    options['type'] = OKCANCEL
     if (Logging==True):
         reply = askquestion('Warning', 'Some viewing features may affect logging.',**viewWarning_opt)
         if (reply=='cancel'):
             return
 
-    vBox=Toplevel()    
+    vBox=Toplevel()
     vBox.transient(master=root)
-    vBox.wm_title("View Log")   
+    vBox.wm_title("View Log")
     vBox.focus_set()
     pBut=Button(vBox, text='Plot Data', command=vPlot)
-    pBut.pack(fill=X, padx=4, pady=3)    
+    pBut.pack(fill=X, padx=4, pady=3)
     sBut=Button(vBox, text='View Streamed Data', command=vStream)
     sBut.pack(fill=X, padx=4, pady=3)
     fBut=Button(vBox, text='View Data File', command=vFile)
@@ -529,8 +529,8 @@ def ViewLog():
     eBut=Button(vBox, text='Open Data in Spreadsheet', command=vSpreadsheet)
     eBut.pack(fill=X, padx=4, pady=3)
     vBox.grab_set()
-    root.wait_window(vBox)            
-        
+    root.wait_window(vBox)
+
 def task():
     global logFile, lfOpen, Logging, streamOpen, fName, SampleC, SampleT, logHeader
     global theta, dnum
@@ -542,7 +542,7 @@ def task():
             SampleT=SampleTmin
     except ValueError:
         SampleT=SampleTmin
-    root.after(int(SampleT*1000),task)   
+    root.after(int(SampleT*1000),task)
     logString=''
     dTypes=''
     j=0
@@ -558,14 +558,14 @@ def task():
                 theta[i]=(theta[i]+1)%360
                 rad=math.radians(theta[i])
                 dacval=2.048*(1+math.sin(rad))
-                dacval2=2.048*(1+math.sin(2*rad))          
+                dacval2=2.048*(1+math.sin(2*rad))
                 DAQC.setDAC(i,0,dacval)
                 DAQC.setDAC(i,1,dacval2)
 
             #Retrieve and plot  values
-            a2dvals=daqc[i].a2dupdate() 
+            a2dvals=daqc[i].a2dupdate()
             dinvals=daqc[i].dinupdate()
-            
+
             #Convert data to strings for log
             for k in range(8):
                 if (a2dvals[k] != ''):
@@ -577,16 +577,16 @@ def task():
                     logString=logString+str(dinvals[k])+','
                     dChannelCount += 1
                     dTypes = dTypes+'d,'
-     
+
     dtypes = dTypes[:-1]
-    logString = logString[:-1] 
-    logString = time.strftime("%H:%M:%S",time.localtime())+','+logString    
+    logString = logString[:-1]
+    logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
     if (Logging and lfOpen):
         #logString = logString[:-1]
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
         logFile.write(logString)
         logFile.write('\n')
-        
+
     if (Logging and streamOpen):
         headerList=logHeader.split(",")
         #logString = logString[:-1]
@@ -594,8 +594,8 @@ def task():
         typeList=dTypes.split(",")
         #print aChannelCount, dChannelCount, aChannelCount+dChannelCount
         for i in range(0,aChannelCount+dChannelCount):
-            k=i+1           
-            if (typeList[i] == 'a'):           
+            k=i+1
+            if (typeList[i] == 'a'):
                 streamer.log(headerList[k],float(dataList[k]))
                 #print i,typeList[i],headerList[k],float(dataList[k])
             else:
@@ -605,8 +605,8 @@ def task():
                 else:
                     streamer.log(headerList[k],"true")
                     #print i,typeList[i],headerList[k], 'true'
-        
-        
+
+
     if (Logging):
         SampleC -= 1
         root.wm_title("DAQCplate Data Logger - LOGGING - "+str(SampleC)+" Samples and "+str(SampleT*SampleC)+" Seconds Remaining")
@@ -616,36 +616,32 @@ def task():
             StartLog()
 
             #showinfo("Logging","Logging Complete")
-            
+
 def updateSheets():
     vals =[]
     log = open('log.log', 'rU')
     reader = csv.reader(log, delimiter=';')
-    first = True
     count = 0
     date = str(datetime.datetime.today()).split()[0]
     for row in reader:
-        if(first):
-            first = False
-        else:
-            items = row[0].split(',')
-            if(count == 0):
-                vals.append([])
-                vals[count].append(date)
-                for s in items:
-                    vals[count].append(s)
-                count = count + 1
-                
-            elif(diffVals(items, vals[count-1])):
-                vals.append([])
-                vals[count].append(date)
-                for s in items:
-                    vals[count].append(s)
-                count = count + 1
-        
+        items = row[0].split(',')
+        if(count == 0):
+            vals.append([])
+            vals[count].append(date)
+            for s in items:
+                vals[count].append(s)
+            count = count + 1
+
+        elif(diffVals(items, vals[count-1][1:])):
+            vals.append([])
+            vals[count].append(date)
+            for s in items:
+                vals[count].append(s)
+            count = count + 1
+
     log.close()
-    
-    # Call the Sheets API  
+
+    # Call the Sheets API
     body = {
         'values': vals
     }
@@ -654,117 +650,117 @@ def updateSheets():
         range='A1',
         valueInputOption='USER_ENTERED',
         body=body).execute()
-    
+
 def diffVals(arr1,arr2):
     for i in range (1,len(arr1),1):
-        if(not arr1[i] == arr2[i + 1]):
+        if(not arr1[i] == arr2[i]):
             return True
     return False
 
 class daqcDASH:
     def __init__(self,frame,addr):
         self.a2d=range(8)
-        self.din=range(8)    
-        
+        self.din=range(8)
+
         def deSelect():
             for i in range(0,8):
                 self.a2d[i].deSelect()
                 self.din[i].deSelect()
-                
+
         def selectAll():
-            for i in range(0,8):        
+            for i in range(0,8):
                 self.a2d[i].Select()
                 self.din[i].Select()
-            
+
         self.addr=addr
         self.root=frame
-        
+
         BG='#888FFF888'
         off=0
         self.mFrame=Frame(self.root,bg=BG,bd=0,relief="ridge")
-        self.mFrame.place(x=0,y=off,width=W,height=SLICE+10)   
+        self.mFrame.place(x=0,y=off,width=W,height=SLICE+10)
         self.button1=Button(self.mFrame, text='Clear All', command=deSelect)
         self.button1.grid(row=0, column=0, padx=4,pady=5)
-        self.button2=Button(self.mFrame, text='Select All', command=selectAll)  
+        self.button2=Button(self.mFrame, text='Select All', command=selectAll)
         self.button2.grid(row=0, column=1, padx=4,pady=5)
-        
+
         self.a2d=range(8)
         self.din=range(8)
         for i in range(0,8):
             self.a2d[i]=daqcADC(self.root,self.addr,i)
-            self.din[i]=daqcDIN(self.root,self.addr,i)      
-    
+            self.din[i]=daqcDIN(self.root,self.addr,i)
+
     def a2dupdate(self):
         vals=['','','','','','','','']
-        for i in range(0,8):          
+        for i in range(0,8):
             vals[i]=self.a2d[i].update()
         return vals
 
     def dinupdate(self):
         vals=['','','','','','','','']
-        for i in range(0,8):          
+        for i in range(0,8):
             vals[i]=self.din[i].update()
-        return vals   
+        return vals
 
     def a2dDescriptors(self):
         vals=['','','','','','','','']
         for i in range(0,8):
             vals[i]=self.a2d[i].descriptors()
-        return vals   
-        
+        return vals
+
     def dinDescriptors(self):
         vals=['','','','','','','','']
-        for i in range(0,8):    
+        for i in range(0,8):
             vals[i]=self.din[i].descriptors()
-        return vals   
-        
+        return vals
+
     def a2dGetLabels(self):
         vals=['','','','','','','','']
         for i in range(0,8):
             vals[i]=self.a2d[i].getLabel()
-        return vals   
-        
+        return vals
+
     def dinGetLabels(self):
         vals=['','','','','','','','']
-        for i in range(0,8):    
+        for i in range(0,8):
             vals[i]=self.din[i].getLabel()
-        return vals   
+        return vals
 
     def a2dGetStates(self):
         vals=['','','','','','','','']
         for i in range(0,8):
             vals[i]=self.a2d[i].getState()
-        return vals   
-        
+        return vals
+
     def dinGetStates(self):
         vals=['','','','','','','','']
-        for i in range(0,8):    
+        for i in range(0,8):
             vals[i]=self.din[i].getState()
-        return vals     
+        return vals
 
     def a2dSetLabels(self,labels):
         self.vals=labels
         for i in range(0,8):
             self.a2d[i].setLabel(self.vals[i])
-        return   
-        
+        return
+
     def dinSetLabels(self,labels):
         self.vals=labels
-        for i in range(0,8):    
+        for i in range(0,8):
             self.din[i].setLabel(self.vals[i])
-        return   
+        return
 
     def a2dSetStates(self,states):
         self.vals=states
         for i in range(0,8):
             self.a2d[i].setState(self.vals[i])
-        return   
-        
+        return
+
     def dinSetStates(self,states):
         self.vals=states
-        for i in range(0,8):    
+        for i in range(0,8):
             self.din[i].setState(self.vals[i])
-        return         
+        return
 
 class daqcADC:
     def __init__(self,root,addr,channel):
@@ -796,18 +792,18 @@ class daqcADC:
         for i in range(self.maxrange):
             self.log[i]=0.0
         self.nextPtr=0
-        
+
     def cb(self):
         if (self.var==1):
             a=1
-            
+
     def deSelect(self):
         self.a2dc.deselect()
 
     def Select(self):
-        self.a2dc.select()        
-        
-        
+        self.a2dc.select()
+
+
     def update(self):
         if (self.var.get()==1):
             self.val.set(DAQC.getADC(self.addr,self.chan))
@@ -829,17 +825,17 @@ class daqcADC:
         return self.a2dl.get()
 
     def setLabel(self,label):
-        self.a2dl.set(label)        
-        
+        self.a2dl.set(label)
+
     def getState(self):
-        return self.var.get()        
- 
+        return self.var.get()
+
     def setState(self,state):
         if (state=='1'):
             self.a2dc.select()
         else:
             self.a2dc.deselect()
-            
+
     def plot(self):
         points=range(2*self.CWidth)
         for i in range(self.CWidth):
@@ -849,8 +845,8 @@ class daqcADC:
             points[2*i+1]=SLICE-1-lval
         self.a2dcanvas.delete("all")
         self.a2dcanvas.create_line(points, fill="#FF0000",width=2)
-            
-            
+
+
 
 class daqcDIN:
     def __init__(self,root,addr,channel):
@@ -858,15 +854,15 @@ class daqcDIN:
         self.addr=addr
         self.chan=channel
         self.var=IntVar()
-        self.var.set(1)    
+        self.var.set(1)
         self.val=IntVar()
         self.val.set(DAQC.getDINbit(self.addr,self.chan))
         self.valstring=StringVar()
         self.valstring.set(str(self.val.get()))
-        
+
         off=H-2-9*SLICE+self.chan*SLICE
         BG='#FFFFFF888'
-        self.CWidth=int(.75*W+20)        
+        self.CWidth=int(.75*W+20)
         self.dinf=Frame(self.root,bg=BG,bd=0,relief="ridge")
         self.dinf.place(x=0,y=off,width=W,height=SLICE)
         self.dinc=Checkbutton(self.dinf,fg="Black",bg=BG,variable=self.var,command=self.cb)
@@ -883,17 +879,17 @@ class daqcDIN:
         for i in range(self.maxrange):
             self.log[i]=0.0
         self.nextPtr=0
-        
+
     def cb(self):
         if (self.var==1):
-            a=1  
+            a=1
 
     def deSelect(self):
         self.dinc.deselect()
 
     def Select(self):
-        self.dinc.select()  
-        
+        self.dinc.select()
+
     def update(self):
         if (self.var.get()==1):
             self.val.set(DAQC.getDINbit(self.addr,self.chan))
@@ -909,23 +905,23 @@ class daqcDIN:
         if (self.var.get()==1):
             return self.dinl.get()
         else:
-            return ''            
+            return ''
 
     def getLabel(self):
         return self.dinl.get()
 
     def setLabel(self,label):
-        self.dinl.set(label)         
+        self.dinl.set(label)
 
     def getState(self):
-        return self.var.get()  
+        return self.var.get()
 
     def setState(self,state):
         if (state=='1'):
             self.dinc.select()
         else:
             self.dinc.deselect()
-            
+
     def plot(self):
         points=range(2*self.CWidth)
         for i in range(self.CWidth):
@@ -935,9 +931,9 @@ class daqcDIN:
             points[2*i+1]=SLICE-1-lval
         self.dincanvas.delete("all")
         self.dincanvas.create_line(points, fill="#0000FF",width=2)
-            
+
 SampleT=0.2
-theta=[0,0,0,0,0,0,0,0]  
+theta=[0,0,0,0,0,0,0,0]
 dnum=[0,0,0,0,0,0,0,0]
 SampleC=0
 logFile=0
@@ -947,14 +943,14 @@ Logging=False
 logHeader=''
 streamer=0
 fName=''
-            
+
 root = Tk()
 root.resizable(0,0)
 #root=Pmw.initialise()
 
 menu=Menu(root)
 root.wm_title("DAQCplate Data Logger")
-    
+
 W=800
 H=600
 SLICE=33
@@ -981,7 +977,7 @@ setupmenu.add_command(label="Logging", command=Configure)
 if (ISSfound):
     setupmenu.add_command(label="Streaming", command=streamSetup)
 setupmenu.add_command(label="Test Signals", command=signalSetup)
-  
+
 helpmenu = Menu(menu,tearoff=0)
 menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="Documentation", command=Docs)
@@ -1017,7 +1013,7 @@ for i in range (0,8):
         DAQC.setPWM(i,0,0)
         DAQC.setPWM(i,1,0)
         page = notebook.add('DAQC'+str(i))
-        notebook.tab('DAQC'+str(i)).focus_set()        
+        notebook.tab('DAQC'+str(i)).focus_set()
         daqc[i]=daqcDASH(page,i)
         SampleTmin+=0.2
     else:
@@ -1041,7 +1037,7 @@ StreamKey=StringVar()
 StreamKey.set('YourKeyHere')
 
 StreamBucket=StringVar()
-StreamBucket.set('ppLogger')    
+StreamBucket.set('ppLogger')
 
 StreamIdentifier=StringVar()
 StreamIdentifier.set('Test 1')
@@ -1055,10 +1051,10 @@ DoutSignal.set(0)
 OpenSetupFileCustom()
 NewLogFileCustom()
 StartLog()
-    
-notebook.setnaturalsize() 
-root.after(int(SampleT*1000),task) 
 
-root.after(500,doUpdates) 
-      
-root.mainloop()        
+notebook.setnaturalsize()
+root.after(int(SampleT*1000),task)
+
+root.after(500,doUpdates)
+
+root.mainloop()
