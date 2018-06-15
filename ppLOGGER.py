@@ -121,7 +121,7 @@ options['initialfile'] = 'setup.stp'
 #options['parent'] = root
 options['title'] = 'Open setup file'
 
-global prevLine = []
+prevLine = []
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 SPREADSHEET_ID = '1jKAr2EvVzthwGE_jFjFh5Jk2iYvxG3FdW0KR7aJCLh8'
 # Setup Sheets API
