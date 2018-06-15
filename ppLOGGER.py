@@ -624,7 +624,7 @@ def updateSheets():
     vals =[]
     global prevLine
     prev =  prevLine
-    print(len(prev))
+    print('STARTING SHEETS UPDATE')
     log = open('log.log', 'rU')
     reader = csv.reader(log, delimiter=';')
     count = 0
@@ -634,6 +634,7 @@ def updateSheets():
         items = row[0].split(',')
         addToVals = False
         if(len(prev) == 0):
+            print("PREV == 0")
             addToVals = True
         elif(diffVals(items[1:], prev[2:])):
             print(items[1:])
@@ -648,6 +649,8 @@ def updateSheets():
             count = count + 1
 
     log.close()
+    print(len(vals))
+    print(count -1)
     prevLine = vals[count-1]
 
     # Call the Sheets API
