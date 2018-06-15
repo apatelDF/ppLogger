@@ -629,9 +629,9 @@ def updateSheets():
         items = row[0].split(',')
         addToVals = False
 
-        if(len(prevLine) == 0):
+        if(len(global prevLine) == 0):
             addToVals = True
-        elif(count == 0 and diffVals(items[1:], prevLine[2:])):
+        elif(count == 0 and diffVals(items[1:],global prevLine[2:])):
             addToVals = True
         elif(diffVals(items[1:], vals[count-1][2:])):
             addToVals = True
@@ -643,7 +643,7 @@ def updateSheets():
                 vals[count].append(s)
             count = count + 1
     log.close()
-    prevLine = vals[count]
+    global prevLine = vals[count]
 
     # Call the Sheets API
     body = {
