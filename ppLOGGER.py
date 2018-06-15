@@ -627,15 +627,18 @@ def updateSheets():
     reader = csv.reader(log, delimiter=';')
     count = 0
     date = str(datetime.datetime.today()).split()[0]
-
+    # Iterate through the csv
     for row in reader:
         items = row[0].split(',')
         addToVals = False
+
+        #If vals needs to be updated
         if(len(prevLine) == 0):
             addToVals = True
         elif(diffVals(items[1:], prevLine[2:])):
             addToVals = True
-
+            
+        # Add array of data at next open index of vals
         if (addToVals):
             vals.append([])
             vals[count].append(date)
