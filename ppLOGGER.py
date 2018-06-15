@@ -121,8 +121,10 @@ options['initialfile'] = 'setup.stp'
 #options['parent'] = root
 options['title'] = 'Open setup file'
 
+global prevLine = []
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 SPREADSHEET_ID = '1jKAr2EvVzthwGE_jFjFh5Jk2iYvxG3FdW0KR7aJCLh8'
+# Setup Sheets API
 store = file.Storage('credentials.json')
 creds = store.get()
 if not creds or creds.invalid:
@@ -620,6 +622,7 @@ def task():
 
 def updateSheets():
     vals =[]
+    prev = global prevLine
     log = open('log.log', 'rU')
     reader = csv.reader(log, delimiter=';')
     count = 0
@@ -628,8 +631,9 @@ def updateSheets():
     for row in reader:
         items = row[0].split(',')
         addToVals = False
-
-        if(count == 0):
+        if(len(prev) == 0):
+            addToVals = True
+        if(count == 0 and diffVals(items[1:], prev[2:])):
             addToVals = True
         elif(diffVals(items[1:], vals[count-1][2:])):
             addToVals = True
@@ -640,7 +644,9 @@ def updateSheets():
             for s in items:
                 vals[count].append(s)
             count = count + 1
+
     log.close()
+    prevLine = vals[count]
 
     # Call the Sheets API
     body = {
