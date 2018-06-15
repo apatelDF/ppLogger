@@ -623,8 +623,6 @@ def task():
 def updateSheets():
     vals =[]
     global prevLine
-    prev =  prevLine
-    print('STARTING SHEETS UPDATE')
     log = open('log.log', 'rU')
     reader = csv.reader(log, delimiter=';')
     count = 0
@@ -633,7 +631,7 @@ def updateSheets():
     for row in reader:
         items = row[0].split(',')
         addToVals = False
-        if(len(prev) == 0):
+        if(len(prevLine) == 0):
             addToVals = True
         elif(diffVals(items[1:], prev[2:])):
             addToVals = True
@@ -643,11 +641,10 @@ def updateSheets():
             vals[count].append(date)
             for s in items:
                 vals[count].append(s)
-            prev = vals[count]
+            prevLine = vals[count]
             count = count + 1
 
     log.close()
-    prevLine = prev
 
     # Call the Sheets API
     body = {
