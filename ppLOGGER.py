@@ -622,7 +622,7 @@ def task():
 
 def updateSheets():
     vals =[]
-    prev = global prevLine
+    prev =  prevLine
     log = open('log.log', 'rU')
     reader = csv.reader(log, delimiter=';')
     count = 0
