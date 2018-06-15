@@ -636,6 +636,8 @@ def updateSheets():
         if(len(prev) == 0):
             addToVals = True
         elif(diffVals(items[1:], prev[2:])):
+            print(items[1:])
+            print(prev[2:])
             addToVals = True
 
         if (addToVals):
