@@ -625,6 +625,7 @@ def updateSheets():
     reader = csv.reader(log, delimiter=';')
     count = 0
     date = str(datetime.datetime.today()).split()[0]
+    global prevLine
     for row in reader:
         items = row[0].split(',')
         addToVals = False
@@ -643,7 +644,7 @@ def updateSheets():
                 vals[count].append(s)
             count = count + 1
     log.close()
-    global prevLine = vals[count]
+    prevLine = vals[count]
 
     # Call the Sheets API
     body = {
