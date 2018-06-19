@@ -123,7 +123,7 @@ prevLine = []
 
 THINGSBOARD_HOST = 'demo.thingsboard.io'
 ACCESS_TOKEN = '6v1pe1SwrYIoNzbJAzNK'
-sensor_data = {'ts': 0, 'values': {'TIME': 0,'DIN1': 0, 'DIN2': 0, 'DIN3': 0, 'DIN4': 0, 'DIN5': 0, 'DIN6': 0, 'DIN7': 0, 'DIN8': 0}}
+sensor_data = {'ts': 0, 'values': {'DIN1': 0, 'DIN2': 0, 'DIN3': 0, 'DIN4': 0, 'DIN5': 0, 'DIN6': 0, 'DIN7': 0, 'DIN8': 0}}
 client = mqtt.Client()
 
 # Set access token
@@ -583,7 +583,7 @@ def task():
 
     dtypes = dTypes[:-1]
     logString = logString[:-1]
-    logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
+    logString = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)+','+logString
     if (Logging and lfOpen):
         #logString = logString[:-1]
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
@@ -644,8 +644,7 @@ def updateSheets():
         # Add array of data at next open index of vals
         if (addToVals):
             prevLine = items[1:]
-            sensor_data['ts'] = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
-            sensor_data['values']['TIME'] = items[0]
+            sensor_data['ts'] = items[0]
             sensor_data['values']['DIN1'] = items[1]
             sensor_data['values']['DIN2'] = items[2]
             sensor_data['values']['DIN3'] = items[3]
