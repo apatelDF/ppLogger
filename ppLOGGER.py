@@ -644,9 +644,7 @@ def updateSheets():
         # Add array of data at next open index of vals
         if (addToVals):
             prevLine = items[1:]
-            dts = datetime.datetime.utcnow()
-            epochtime = round(time.mktime(dts.timetuple()) + dts.microsecond/1e6)
-            sensor_data['ts'] = epochtime
+            sensor_data['ts'] = int(datetime.now(tz=timezone.cst).timestamp() * 1000)
             sensor_data['values']['DIN1'] = items[1]
             sensor_data['values']['DIN2'] = items[2]
             sensor_data['values']['DIN3'] = items[3]
