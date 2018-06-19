@@ -11,13 +11,11 @@ import random
 import math
 import imp
 
-from apiclient.discovery import build
-from httplib2 import Http
-from oauth2client import file, client, tools
 import csv
 import datetime
 
-import copy
+import paho.mqtt.client as mqtt
+import json
 
 try:
     import piplates.DAQCplate as DAQC
@@ -122,15 +120,17 @@ options['initialfile'] = 'setup.stp'
 options['title'] = 'Open setup file'
 
 prevLine = []
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-SPREADSHEET_ID = '1jKAr2EvVzthwGE_jFjFh5Jk2iYvxG3FdW0KR7aJCLh8'
-# Setup Sheets API
-store = file.Storage('credentials.json')
-creds = store.get()
-if not creds or creds.invalid:
-    flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
-    creds = tools.run_flow(flow, store)
-service = build('sheets', 'v4', http=creds.authorize(Http()))
+
+THINGSBOARD_HOST = 'demo.thingsboard.io'
+ACCESS_TOKEN = '6v1pe1SwrYIoNzbJAzNK'
+sensor_data = {'TIME':0, 'DIN1': 0, 'DIN2': 0, 'DIN3': 0, 'DIN4': 0, 'DIN5': 0, 'DIN6': 0, 'DIN7': 0, 'DIN8': 0}
+client = mqtt.Client()
+
+# Set access token
+client.username_pw_set(ACCESS_TOKEN)
+# Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
+client.connect(THINGSBOARD_HOST, 1883, 60)
+client.loop_start()
 
 
 
@@ -624,11 +624,9 @@ def task():
 
 
 def updateSheets():
-    vals =[]
     global prevLine
     log = open('log.log', 'rU')
     reader = csv.reader(log, delimiter=';')
-    count = 0
     date = str(datetime.datetime.today()).split()[0]
     # Iterate through the csv
     for row in reader:
@@ -638,29 +636,25 @@ def updateSheets():
         #If vals needs to be updated
         if(len(prevLine) == 0):
             addToVals = True
-        elif(diffVals(items[1:], prevLine[2:])):
+        elif(diffVals(items[1:], prevLine)):
             addToVals = True
 
         # Add array of data at next open index of vals
         if (addToVals):
-            vals.append([])
-            vals[count].append(date)
-            for s in items:
-                vals[count].append(s)
-            prevLine = vals[count]
-            count = count + 1
-
+            prevLine = items[1:]
+            sensor_data['TIME'] = items[0]
+            sensor_data['DIN1'] = items[1]
+            sensor_data['DIN2'] = items[2]
+            sensor_data['DIN3'] = items[3]
+            sensor_data['DIN4'] = items[4]
+            sensor_data['DIN5'] = items[5]
+            sensor_data['DIN6'] = items[6]
+            sensor_data['DIN7'] = items[7]
+            sensor_data['DIN8'] = items[8]
+            sensor_data['temperature'] = temp
+            print(sensor_data.text)
+            sleep(1)
     log.close()
-
-    # Call the Sheets API
-    body = {
-        'values': vals
-    }
-    result = service.spreadsheets().values().append(
-        spreadsheetId = SPREADSHEET_ID,
-        range='A1',
-        valueInputOption='USER_ENTERED',
-        body=body).execute()
 
 def diffVals(arr1,arr2):
     for i in range (0,len(arr1),1):
