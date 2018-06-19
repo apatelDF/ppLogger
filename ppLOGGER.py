@@ -642,7 +642,6 @@ def updateSheets():
         # Add array of data at next open index of vals
         if (addToVals):
             prevLine = items[1:]
-            sleep(1)
             sensor_data['ts'] = items[0]
             sensor_data['values']['DIN1'] = items[1]
             sensor_data['values']['DIN2'] = items[2]
