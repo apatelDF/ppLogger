@@ -13,9 +13,9 @@ import imp
 
 import csv
 import datetime
-
 import paho.mqtt.client as mqtt
 import json
+from time import sleep
 
 try:
     import piplates.DAQCplate as DAQC
@@ -620,6 +620,8 @@ def task():
                 StartLog()
                 #showinfo("Logging","Logging Complete")
             except:
+                client.loop_stop()
+                client.disconnect()
                 shutDown()
 
 
@@ -651,8 +653,8 @@ def updateSheets():
             sensor_data['DIN6'] = items[6]
             sensor_data['DIN7'] = items[7]
             sensor_data['DIN8'] = items[8]
-            sensor_data['temperature'] = temp
             print(sensor_data.text)
+            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
             sleep(1)
     log.close()
 
