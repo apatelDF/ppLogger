@@ -130,8 +130,6 @@ client = mqtt.Client()
 client.username_pw_set(ACCESS_TOKEN)
 # Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
 client.connect(THINGSBOARD_HOST, 1883, 60)
-client.loop_start()
-
 
 
 def on_closing():
@@ -621,7 +619,6 @@ def task():
                 StartLog()
                 #showinfo("Logging","Logging Complete")
             except:
-                client.loop_stop()
                 client.disconnect()
                 shutDown()
 
@@ -630,7 +627,7 @@ def updateSheets():
     global prevLine
     log = open('log.log', 'rU')
     reader = csv.reader(log, delimiter=';')
-    date = str(datetime.datetime.today()).split()[0]
+    client.loop_start()
     # Iterate through the csv
     for row in reader:
         items = row[0].split(',')
@@ -645,6 +642,7 @@ def updateSheets():
         # Add array of data at next open index of vals
         if (addToVals):
             prevLine = items[1:]
+            sleep(1)
             sensor_data['ts'] = items[0]
             sensor_data['values']['DIN1'] = items[1]
             sensor_data['values']['DIN2'] = items[2]
@@ -655,7 +653,8 @@ def updateSheets():
             sensor_data['values']['DIN7'] = items[7]
             sensor_data['values']['DIN8'] = items[8]
             client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
-            sleep(1.5)
+
+    client.loop_stop()
     log.close()
 
 def diffVals(arr1,arr2):
