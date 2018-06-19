@@ -123,7 +123,7 @@ prevLine = []
 
 THINGSBOARD_HOST = 'demo.thingsboard.io'
 ACCESS_TOKEN = '6v1pe1SwrYIoNzbJAzNK'
-sensor_data = {'TIME':0, 'DIN1': 0, 'DIN2': 0, 'DIN3': 0, 'DIN4': 0, 'DIN5': 0, 'DIN6': 0, 'DIN7': 0, 'DIN8': 0}
+sensor_data = {'ts': 0, 'values': {'DIN1': 0, 'DIN2': 0, 'DIN3': 0, 'DIN4': 0, 'DIN5': 0, 'DIN6': 0, 'DIN7': 0, 'DIN8': 0}}
 client = mqtt.Client()
 
 # Set access token
@@ -644,18 +644,17 @@ def updateSheets():
         # Add array of data at next open index of vals
         if (addToVals):
             prevLine = items[1:]
-            sensor_data['TIME'] = items[0]
-            sensor_data['DIN1'] = items[1]
-            sensor_data['DIN2'] = items[2]
-            sensor_data['DIN3'] = items[3]
-            sensor_data['DIN4'] = items[4]
-            sensor_data['DIN5'] = items[5]
-            sensor_data['DIN6'] = items[6]
-            sensor_data['DIN7'] = items[7]
-            sensor_data['DIN8'] = items[8]
-            print(sensor_data.text)
+            sensor_data['ts'] = time.time()
+            sensor_data['values']['DIN1'] = items[1]
+            sensor_data['values']['DIN2'] = items[2]
+            sensor_data['values']['DIN3'] = items[3]
+            sensor_data['values']['DIN4'] = items[4]
+            sensor_data['values']['DIN5'] = items[5]
+            sensor_data['values']['DIN6'] = items[6]
+            sensor_data['values']['DIN7'] = items[7]
+            sensor_data['values']['DIN8'] = items[8]
             client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
-            sleep(1)
+            sleep(.5)
     log.close()
 
 def diffVals(arr1,arr2):
