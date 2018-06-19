@@ -297,6 +297,7 @@ def StartLog():
             streamer.log("Pi-Plates", "DACQ Log Stream Starting")
         Logging=True
         SampleC=int(SampleCount.get())
+        client.loop_start()
     else:
         showerror(
             "Logging",
@@ -586,8 +587,19 @@ def task():
     if (Logging and lfOpen):
         #logString = logString[:-1]
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
-        logFile.write(logString)
-        logFile.write('\n')
+        # logFile.write(logString)
+        # logFile.write('\n')
+        items = logString.split[',']
+        sensor_data['ts'] = items[0]
+        sensor_data['values']['DIN1'] = items[1]
+        sensor_data['values']['DIN2'] = items[2]
+        sensor_data['values']['DIN3'] = items[3]
+        sensor_data['values']['DIN4'] = items[4]
+        sensor_data['values']['DIN5'] = items[5]
+        sensor_data['values']['DIN6'] = items[6]
+        sensor_data['values']['DIN7'] = items[7]
+        sensor_data['values']['DIN8'] = items[8]
+        client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
 
     if (Logging and streamOpen):
         headerList=logHeader.split(",")
@@ -613,48 +625,13 @@ def task():
         SampleC -= 1
         root.wm_title("DAQCplate Data Logger - LOGGING - "+str(SampleC)+" Samples and "+str(SampleT*SampleC)+" Seconds Remaining")
         if (SampleC==0):
-            StopLog()
             try:
-                updateSheets()
+                StopLog()
+                client.loop_stop()
                 StartLog()
-                #showinfo("Logging","Logging Complete")
             except:
                 client.disconnect()
                 shutDown()
-
-
-def updateSheets():
-    global prevLine
-    log = open('log.log', 'rU')
-    reader = csv.reader(log, delimiter=';')
-    client.loop_start()
-    # Iterate through the csv
-    for row in reader:
-        items = row[0].split(',')
-        addToVals = False
-
-        #If vals needs to be updated
-        if(len(prevLine) == 0):
-            addToVals = True
-        elif(diffVals(items[1:], prevLine)):
-            addToVals = True
-
-        # Add array of data at next open index of vals
-        if (addToVals):
-            prevLine = items[1:]
-            sensor_data['ts'] = items[0]
-            sensor_data['values']['DIN1'] = items[1]
-            sensor_data['values']['DIN2'] = items[2]
-            sensor_data['values']['DIN3'] = items[3]
-            sensor_data['values']['DIN4'] = items[4]
-            sensor_data['values']['DIN5'] = items[5]
-            sensor_data['values']['DIN6'] = items[6]
-            sensor_data['values']['DIN7'] = items[7]
-            sensor_data['values']['DIN8'] = items[8]
-            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
-
-    client.loop_stop()
-    log.close()
 
 def diffVals(arr1,arr2):
     for i in range (0,len(arr1),1):
