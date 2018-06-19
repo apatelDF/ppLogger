@@ -583,7 +583,7 @@ def task():
 
     dtypes = dTypes[:-1]
     logString = logString[:-1]
-    logString = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)+','+logString
+    logString = str(int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)) +','+logString
     if (Logging and lfOpen):
         #logString = logString[:-1]
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
