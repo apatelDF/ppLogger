@@ -123,7 +123,7 @@ prevLine = []
 
 THINGSBOARD_HOST = 'demo.thingsboard.io'
 ACCESS_TOKEN = '6v1pe1SwrYIoNzbJAzNK'
-sensor_data = {'ts': 0, 'values': {'TIME':0, DIN1': 0, 'DIN2': 0, 'DIN3': 0, 'DIN4': 0, 'DIN5': 0, 'DIN6': 0, 'DIN7': 0, 'DIN8': 0}}
+sensor_data = {'ts': 0, 'values': {'TIME': 0,'DIN1': 0, 'DIN2': 0, 'DIN3': 0, 'DIN4': 0, 'DIN5': 0, 'DIN6': 0, 'DIN7': 0, 'DIN8': 0}}
 client = mqtt.Client()
 
 # Set access token
