@@ -11,7 +11,6 @@ import random
 import math
 import imp
 
-import csv
 import datetime
 import paho.mqtt.client as mqtt
 import json
@@ -589,7 +588,7 @@ def task():
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
         # logFile.write(logString)
         # logFile.write('\n')
-        items = logString.split[',']
+        items = logString.split(',')
         sensor_data['ts'] = items[0]
         sensor_data['values']['DIN1'] = items[1]
         sensor_data['values']['DIN2'] = items[2]
