@@ -654,7 +654,7 @@ def updateSheets():
             sensor_data['values']['DIN7'] = items[7]
             sensor_data['values']['DIN8'] = items[8]
             client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
-            sleep(.75)
+            sleep(1)
     log.close()
 
 def diffVals(arr1,arr2):
