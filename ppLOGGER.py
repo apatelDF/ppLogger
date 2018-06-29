@@ -118,7 +118,7 @@ options['initialfile'] = 'setup.stp'
 #options['parent'] = root
 options['title'] = 'Open setup file'
 
-prevLine = []
+prevLine = ""
 
 THINGSBOARD_HOST = 'demo.thingsboard.io'
 ACCESS_TOKEN = '6v1pe1SwrYIoNzbJAzNK'
@@ -581,24 +581,30 @@ def task():
 
     dtypes = dTypes[:-1]
     logString = logString[:-1]
-    epoch = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
-    logString = str(epoch) +','+logString
+
     if (Logging and lfOpen):
         #logString = logString[:-1]
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
         # logFile.write(logString)
         # logFile.write('\n')
-        items = logString.split(',')
-        sensor_data['ts'] = items[0]
-        sensor_data['values']['DIN1'] = items[1]
-        sensor_data['values']['DIN2'] = items[2]
-        sensor_data['values']['DIN3'] = items[3]
-        sensor_data['values']['DIN4'] = items[4]
-        sensor_data['values']['DIN5'] = items[5]
-        sensor_data['values']['DIN6'] = items[6]
-        sensor_data['values']['DIN7'] = items[7]
-        sensor_data['values']['DIN8'] = items[8]
-        client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
+        global prevLine
+        if(logString != prevLine):
+            print(sending data)
+            prevLine = logString
+            #add time and date
+            epoch = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+            logString = str(epoch) +','+logString
+            items = logString.split(',')
+            sensor_data['ts'] = items[0]
+            sensor_data['values']['DIN1'] = items[1]
+            sensor_data['values']['DIN2'] = items[2]
+            sensor_data['values']['DIN3'] = items[3]
+            sensor_data['values']['DIN4'] = items[4]
+            sensor_data['values']['DIN5'] = items[5]
+            sensor_data['values']['DIN6'] = items[6]
+            sensor_data['values']['DIN7'] = items[7]
+            sensor_data['values']['DIN8'] = items[8]
+            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
 
     if (Logging and streamOpen):
         headerList=logHeader.split(",")
