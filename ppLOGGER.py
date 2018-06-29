@@ -589,7 +589,7 @@ def task():
         # logFile.write('\n')
         global prevLine
         if(logString != prevLine):
-            print(sending data)
+            print("sending data")
             prevLine = logString
             #add time and date
             epoch = int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
