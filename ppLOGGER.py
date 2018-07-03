@@ -585,8 +585,8 @@ def task():
     if (Logging and lfOpen):
         #logString = logString[:-1]
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
-         logFile.write(logString)
-         logFile.write('\n')
+        logFile.write(logString)
+        logFile.write('\n')
         global prevLine
         if(logString != prevLine):
             print("sending data")
