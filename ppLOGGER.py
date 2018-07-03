@@ -585,8 +585,8 @@ def task():
     if (Logging and lfOpen):
         #logString = logString[:-1]
         #logString = time.strftime("%H:%M:%S",time.localtime())+','+logString
-        # logFile.write(logString)
-        # logFile.write('\n')
+         logFile.write(logString)
+         logFile.write('\n')
         global prevLine
         if(logString != prevLine):
             print("sending data")
@@ -633,7 +633,7 @@ def task():
             try:
                 StopLog()
                 client.loop_stop()
-                StartLog()
+                # StartLog()
             except:
                 client.disconnect()
                 shutDown()
@@ -1002,7 +1002,7 @@ for i in range (0,8):
         page = notebook.add('DAQC'+str(i))
         notebook.tab('DAQC'+str(i)).focus_set()
         daqc[i]=daqcDASH(page,i)
-        SampleTmin+=0.2
+        SampleTmin=0.01
     else:
         DAQCpresent[i]=0
 

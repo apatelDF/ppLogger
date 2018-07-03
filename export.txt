@@ -1,0 +1,3 @@
+curl -v -X GET "http://demo-thingsboard.io/api/plugins/telemetry/DEVICE/0fdf3ff0-73c9-11e8-a80c-5f10b65343cb/values/timeseries?keys=gas,temperature&startTs=0&endTs=1529435108&interval=1&limit=100&agg=MAX" \
+--header "Content-Type:application/json" \
+--header "X-Authorization: 6v1pe1SwrYIoNzbJAzNK"
